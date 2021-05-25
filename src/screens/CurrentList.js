@@ -10,7 +10,13 @@ export default () => {
                 {nachos.map((item) => (
                     <React.Fragment>
                         <Separator />
-                        <ListItem key={item.id} name={item.name} />
+                        <ListItem
+                            key={item.id}
+                            name={item.name}
+                            onFavoritePress={() =>
+                                alert("todo: handle favorite!")
+                            }
+                        />
                     </React.Fragment>
                 ))}
             </ScrollView>

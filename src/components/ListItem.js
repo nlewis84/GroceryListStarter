@@ -1,15 +1,19 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
-const ListItem = ({ name }) => {
+const ListItem = ({ name, onFavoritePress }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>{name}</Text>
-            <Image
-                source={require("../assets/icons/ios-star-outline.png")}
-                style={styles.icon}
-                resizeMode="contain"
-            />
+            {onFavoritePress && (
+                <TouchableOpacity onPress={onFavoritePress}>
+                    <Image
+                        source={require("../assets/icons/ios-star-outline.png")}
+                        style={styles.icon}
+                        resizeMode="contain"
+                    />
+                </TouchableOpacity>
+            )}
         </View>
     );
 };
