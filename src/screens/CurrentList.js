@@ -1,13 +1,17 @@
 import React from "react";
 import { View, Text, SafeAreaView, ScrollView } from "react-native";
 import nachos from "../data/nachos";
+import ListItem, { Separator } from "../components/ListItem";
 
 export default () => {
     return (
         <SafeAreaView>
             <ScrollView>
                 {nachos.map((item) => (
-                    <Text key={item.id}>{item.name}</Text>
+                    <React.Fragment>
+                        <Separator />
+                        <ListItem key={item.id} name={item.name} />
+                    </React.Fragment>
                 ))}
             </ScrollView>
         </SafeAreaView>
