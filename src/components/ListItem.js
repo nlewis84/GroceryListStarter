@@ -1,14 +1,58 @@
 import React from "react";
 import {
     View,
+    Animated,
     Text,
     StyleSheet,
     Image,
     TouchableOpacity,
     Platform,
 } from "react-native";
+import Swipeable from "react-native-gesture-handler/Swipeable";
 
-const ListItem = ({ name, onFavoritePress, isFavorite }) => {
+const LeftActions = (progress, dragX) => {
+    const scale = dragX.interpolate({
+        inputRange: [0, 100],
+        outputRange: [0, 1],
+        extrapolate: "clamp",
+    });
+
+    return (
+        <View style={styles.leftAction}>
+            <Animated.Text
+                style={[styles.actionText, { transform: [{ scale }] }]}
+            >
+                Add to Cart
+            </Animated.Text>
+        </View>
+    );
+};
+
+const RightActions = (progress, dragX) => {
+    const scale = dragX.interpolate({
+        inputRange: [-100, 0],
+        outputRange: [1, 0],
+        extrapolate: "clamp",
+    });
+
+    return (
+        <View style={styles.rightAction}>
+            <Animated.Text
+                style={[styles.actionText, { transform: [{ scale }] }]}
+            >
+                Delete
+            </Animated.Text>
+        </View>
+    );
+};
+
+const ListItem = ({
+    name,
+    onFavoritePress,
+    isFavorite,
+    onAddedSwipe,
+    onDeleteSwipe,
+}) => {
     let starIcon;
     // let starIcon = Platform.select({
     //     ios: require("../assets/icons/ios-star-outline.png"),
@@ -30,18 +74,25 @@ const ListItem = ({ name, onFavoritePress, isFavorite }) => {
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.text}>{name}</Text>
-            {onFavoritePress && (
-                <TouchableOpacity onPress={onFavoritePress}>
-                    <Image
-                        source={starIcon}
-                        style={styles.icon}
-                        resizeMode="contain"
-                    />
-                </TouchableOpacity>
-            )}
-        </View>
+        <Swipeable
+            onSwipeableLeftOpen={onAddedSwipe}
+            onSwipeableRightOpen={onDeleteSwipe}
+            renderLeftActions={onAddedSwipe && LeftActions}
+            renderRightActions={onDeleteSwipe && RightActions}
+        >
+            <View style={styles.container}>
+                <Text style={styles.text}>{name}</Text>
+                {onFavoritePress && (
+                    <TouchableOpacity onPress={onFavoritePress}>
+                        <Image
+                            source={starIcon}
+                            style={styles.icon}
+                            resizeMode="contain"
+                        />
+                    </TouchableOpacity>
+                )}
+            </View>
+        </Swipeable>
     );
 };
 
@@ -77,6 +128,22 @@ const styles = StyleSheet.create({
         felx: 1,
         height: 1,
         backgroundColor: "rgba(0,0,0,0.2)",
+    },
+    leftAction: {
+        flex: 1,
+        backgroundColor: "#388e3c",
+        justifyContent: "center",
+    },
+    rightAction: {
+        flex: 1,
+        backgroundColor: "#dd2c00",
+        alignItems: "flex-end",
+        justifyContent: "center",
+    },
+    actionText: {
+        color: "#fff",
+        fontWeight: "600",
+        padding: 20,
     },
 });
 
