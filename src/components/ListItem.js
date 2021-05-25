@@ -46,12 +46,19 @@ const RightActions = (progress, dragX) => {
     );
 };
 
+export const SectionHeader = ({ title }) => (
+    <View style={[styles.container, styles.sectionContainer]}>
+        <Text style={styles.sectionText}>{title}</Text>
+    </View>
+);
+
 const ListItem = ({
     name,
     onFavoritePress,
     isFavorite,
     onAddedSwipe,
     onDeleteSwipe,
+    onRowPress,
 }) => {
     let starIcon;
     // let starIcon = Platform.select({
@@ -74,25 +81,27 @@ const ListItem = ({
     }
 
     return (
-        <Swipeable
-            onSwipeableLeftOpen={onAddedSwipe}
-            onSwipeableRightOpen={onDeleteSwipe}
-            renderLeftActions={onAddedSwipe && LeftActions}
-            renderRightActions={onDeleteSwipe && RightActions}
-        >
-            <View style={styles.container}>
-                <Text style={styles.text}>{name}</Text>
-                {onFavoritePress && (
-                    <TouchableOpacity onPress={onFavoritePress}>
-                        <Image
-                            source={starIcon}
-                            style={styles.icon}
-                            resizeMode="contain"
-                        />
-                    </TouchableOpacity>
-                )}
-            </View>
-        </Swipeable>
+        <TouchableOpacity onPress={onRowPress}>
+            <Swipeable
+                onSwipeableLeftOpen={onAddedSwipe}
+                onSwipeableRightOpen={onDeleteSwipe}
+                renderLeftActions={onAddedSwipe && LeftActions}
+                renderRightActions={onDeleteSwipe && RightActions}
+            >
+                <View style={styles.container}>
+                    <Text style={styles.text}>{name}</Text>
+                    {onFavoritePress && (
+                        <TouchableOpacity onPress={onFavoritePress}>
+                            <Image
+                                source={starIcon}
+                                style={styles.icon}
+                                resizeMode="contain"
+                            />
+                        </TouchableOpacity>
+                    )}
+                </View>
+            </Swipeable>
+        </TouchableOpacity>
     );
 };
 
@@ -144,6 +153,13 @@ const styles = StyleSheet.create({
         color: "#fff",
         fontWeight: "600",
         padding: 20,
+    },
+    sectionText: {
+        fontWeight: "600",
+    },
+    sectionContainer: {
+        backgroundColor: "#d3d3d3",
+        paddingVertical: 10,
     },
 });
 

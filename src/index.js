@@ -1,3 +1,7 @@
-import CurrentList from "./screens/CurrentList";
+import React from "react";
+import Navigation from "./navigation";
+import { enableScreens } from "react-native-screens";
 
-export default CurrentList;
+enableScreens();
+
+export default () => <Navigation />;

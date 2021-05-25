@@ -1,16 +1,18 @@
 import React from "react";
 import {
     SafeAreaView,
+    SectionList,
     FlatList,
     KeyboardAvoidingView,
     ActivityIndicator,
 } from "react-native";
-import ListItem, { Separator } from "../components/ListItem";
+import ListItem, { Separator, SectionHeader } from "../components/ListItem";
 import AddItem from "../components/AddItem";
 import { useCurrentList } from "../util/ListManager";
 
-export default () => {
-    const { list, loading, addItem, removeItem } = useCurrentList();
+export default ({ navigation }) => {
+    const { list, loading, addItem, removeItem, addToCart, cart } =
+        useCurrentList();
 
     if (loading) {
         return (
@@ -23,8 +25,14 @@ export default () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
-                <FlatList
-                    data={list}
+                <SectionList
+                    sections={[
+                        { title: "List", data: list },
+                        { title: "Cart", data: cart },
+                    ]}
+                    renderSectionHeader={({ section }) => (
+                        <SectionHeader title={section.title} />
+                    )}
                     renderItem={({ item, index }) => (
                         <ListItem
                             name={item.name}
@@ -32,8 +40,11 @@ export default () => {
                                 alert("todo: handle favorite!")
                             }
                             isFavorite={index < 2}
-                            onAddedSwipe={() => removeItem(item.id)}
+                            onAddedSwipe={() => addToCart(item)}
                             onDeleteSwipe={() => removeItem(item.id)}
+                            onRowPress={() =>
+                                navigation.navigate("ItemDetails", { item })
+                            }
                         />
                     )}
                     keyExtractor={(item) => item.id}
